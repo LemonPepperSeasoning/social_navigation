@@ -155,15 +155,18 @@ if __name__=="__main__":
 
 
         print(vels(speed,turn))
-        
+
         count = 0
-        
-            
+
+
         while (loop):
+            print(count)
             count += 1
-            if ( (count // 200) % 2 == 0):
+            if ( (count // 30) % 2 == 0):
+                print("l")
                 key = 'l'
             else :
+                print("j")
                 key = 'j'
             x = moveBindings[key][0]
             y = moveBindings[key][1]
