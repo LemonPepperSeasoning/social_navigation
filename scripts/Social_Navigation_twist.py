@@ -11,31 +11,6 @@ from geometry_msgs.msg import Twist
 
 import sys, select, termios, tty
 
-msg = """
-Reading from the keyboard  and Publishing to Twist!
----------------------------
-Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
-
-For Holonomic mode (strafing), hold down the shift key:
----------------------------
-   U    I    O
-   J    K    L
-   M    <    >
-
-t : up (+z)
-b : down (-z)
-
-anything else : stop
-
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
-
-CTRL-C to quit
-"""
 
 moveBindings = {
         'i':(1,0,0,0),
@@ -147,17 +122,6 @@ class PublishThread(threading.Thread):
         self.publisher.publish(twist)
 
 
-def getKey(key_timeout):
-    tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
-    if rlist:
-        key = sys.stdin.read(1)
-    else:
-        key = ''
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
-
-
 def vels(speed, turn):
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
 
@@ -181,39 +145,31 @@ if __name__=="__main__":
     th = 0
     status = 0
 
+    #listOfPath = main()
+    rate = rospy.Rate(10)
+
+    loop = True
     try:
         pub_thread.wait_for_subscribers()
         pub_thread.update(x, y, z, th, speed, turn)
 
-        print(msg)
+
         print(vels(speed,turn))
-        while(1):
-            key = getKey(key_timeout)
-            if key in moveBindings.keys():
-                x = moveBindings[key][0]
-                y = moveBindings[key][1]
-                z = moveBindings[key][2]
-                th = moveBindings[key][3]
-            elif key in speedBindings.keys():
-                speed = speed * speedBindings[key][0]
-                turn = turn * speedBindings[key][1]
-
-                print(vels(speed,turn))
-                if (status == 14):
-                    print(msg)
-                status = (status + 1) % 15
-            else:
-                # Skip updating cmd_vel if key timeout and robot already
-                # stopped.
-                if key == '' and x == 0 and y == 0 and z == 0 and th == 0:
-                    continue
-                x = 0
-                y = 0
-                z = 0
-                th = 0
-                if (key == '\x03'):
-                    break
-
+        
+        count = 0
+        
+            
+        while (loop):
+            count += 1
+            if ( (count // 200) % 2 == 0):
+                key = 'l'
+            else :
+                key = 'j'
+            x = moveBindings[key][0]
+            y = moveBindings[key][1]
+            z = moveBindings[key][2]
+            th = moveBindings[key][3]
+            rate.sleep()
             pub_thread.update(x, y, z, th, speed, turn)
 
     except Exception as e:
@@ -222,4 +178,4 @@ if __name__=="__main__":
     finally:
         pub_thread.stop()
 
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+        #termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
