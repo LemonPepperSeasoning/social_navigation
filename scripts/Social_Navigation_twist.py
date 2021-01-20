@@ -129,9 +129,9 @@ def vels(speed, turn):
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
 
 def angle3pt(a, b, c):
-    ab = math.sqrt( ( a.position[0] - b.position[0] )**2 + ( a.position[1] - b.position[1] )**2 )
-    bc = math.sqrt( ( c.position[0] - b.position[0] )**2 + ( c.position[1] - b.position[1] )**2 )
-    ac = math.sqrt( ( c.position[0] - a.position[0] )**2 + ( c.position[1] - a.position[1] )**2 )
+    ab = math.sqrt( ( a[0] - b[0] )**2 + ( a[1] - b[1] )**2 )
+    bc = math.sqrt( ( c[0] - b[0] )**2 + ( c[1] - b[1] )**2 )
+    ac = math.sqrt( ( c[0] - a[0] )**2 + ( c[1] - a[1] )**2 )
 
     if (ab**2 + bc**2 - ac**2 == 0):
         return 0
@@ -145,18 +145,18 @@ def angle3pt(a, b, c):
 # y : current node
 # z : destination node
 def move(x,y,z,speed,turn,rate,pub_thread):
-    print ("moving")
+
     if ( ((y[0] - x[0])*(z[1] - x[1]) - (y[1] - x[1])*(z[0] - x[0])) >0):
         turingSide = 1
     else:
         turingSide = -1
     angle = angle3pt(x,y,z)
 
-    count_Rotation = abs(angle)/5.1
+    count_Rotation = abs(angle)/5.142
 
-    distance = ( z.position[0] - y.position[0] )**2 + ( z.position[1] - y.position[1] )**2
+    distance = ( z[0] - y[0] )**2 + ( z[1] - y[1] )**2
 
-    count_Distance = distance/10
+    count_Distance = distance
 
     print ("Rotation :{}, Distance : {}".format(count_Rotation,count_Distance))
     counter = 0
@@ -196,7 +196,12 @@ if __name__=="__main__":
     status = 0
 
     listOfPath = main()
-
+    listOfPath.reverse()
+    p1 = [0,0]
+    p2 = [0,5]
+    p3 = [5,5]
+    p4 = [5,0]
+    listOfPath = [p1, p2, p3, p4]
     rate = rospy.Rate(10)
 
     loop = True
@@ -206,15 +211,13 @@ if __name__=="__main__":
 
         print(vels(speed,turn))
 
-        count = 0
-
         move([0,-1],listOfPath[0],listOfPath[1],speed,turn,rate,pub_thread)
 
         for i in range(1, len(listOfPath)-1):
             print ("moving from {} to {} to {}".format(listOfPath[i-1],listOfPath[i],listOfPath[i+1]))
             move(listOfPath[i-1],listOfPath[i],listOfPath[i+1],speed,turn,rate,pub_thread)
 
-        # move(listOfPath[2],listOfPath[3],[0,0],speed,turn,rate,pub_thread)
+        move(listOfPath[2],listOfPath[3],[0,0],speed,turn,rate,pub_thread)
         pub_thread.update(0, 0, 0, 0, 0, 0)
 
 
