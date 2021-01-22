@@ -19,9 +19,9 @@ def main():
 
     start = Node(position=[0,0])
 
-    end = Node(position=[60,60])
+    end = Node(position=[48,72])
 
-    kevin = Person(x=30,y=50,velocity=0,direction=0)
+    kevin = Person(x=20,y=25,velocity=0,direction=0)
     # john = Person(x=10,y=90,velocity=0,direction=0)
     # sam = Person(x=80,y=20,velocity=0,direction=0)
     # mike = Person(x=10,y=-20,velocity=0,direction=0)
