@@ -183,7 +183,8 @@ include_directories(
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 
-catkin_install_python(PROGRAMS scripts/Social_Navigation_twist.py
+catkin_install_python(
+    PROGRAMS scripts/hard-coded/Social_Navigation_twist.py scripts/using-Move-base/setGoal.p scripts/go-to-detected-human/navigate.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
