@@ -40,7 +40,7 @@ class Person:
 
         layer3Weight = 100
         count = 0
-        layer3 = shapely.affinity.scale(circle, 10, 10)
+        layer3 = shapely.affinity.scale(circle, 20, 20)
         for i,j in list(layer3.exterior.coords):
             if (count % 4 == 0):
                 nodes2.append(Node(position=[i,j], nodeCost= layer3Weight))
@@ -53,7 +53,7 @@ class Person:
 
         nodes = []
         count = 0
-        outerCircle = shapely.affinity.scale(circle, 12, 12)
+        outerCircle = shapely.affinity.scale(circle, 22, 22)
         for i,j in list(outerCircle.exterior.coords):
             if (count % 4 == 0):
                 nodes.append(Node(position=[i,j], nodeCost= 0))
