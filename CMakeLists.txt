@@ -9,6 +9,7 @@ project(social_navigation)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
+  std_msgs
   rospy
 )
 
@@ -184,7 +185,8 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 
 catkin_install_python(
-    PROGRAMS scripts/hard-coded/Social_Navigation_twist.py scripts/using-Move-base/setGoal.p scripts/go-to-detected-human/navigate.py
+    PROGRAMS scripts/hard-coded/Social_Navigation_twist.py scripts/using-Move-base/setGoal.p scripts/go-to-detected-human/navigate.py 
+    scripts/go-to-detected-human/navigate_v2.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
