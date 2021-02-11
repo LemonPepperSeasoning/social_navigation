@@ -187,6 +187,7 @@ include_directories(
 catkin_install_python(
     PROGRAMS scripts/hard-coded/Social_Navigation_twist.py scripts/using-Move-base/setGoal.p scripts/go-to-detected-human/navigate.py 
     scripts/go-to-detected-human/navigate_v2.py
+    scripts/navigate-to-human-with-zone/socialApproach.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
